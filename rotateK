@@ -1,0 +1,88 @@
+/* Given a list 1-2-3-4-5 and k, rotate the list by k places 
+
+k = 2, list : 4-5-1-2-3 */
+
+
+
+#include <iostream>
+#include <stack>
+
+struct node {
+    int data;
+    node *next;
+    node(int x) : data(x), next(NULL) {}
+};
+
+
+void insert(node *&head, int key) {
+    if(head == NULL) {
+        node *tmp = new node(key);
+        head = tmp;
+    } else {
+        node *tmp = new node(key);
+        tmp->next = head;
+        head = tmp;
+    }
+    
+}
+
+node *rotatek(node *&head, int k) {
+    
+    if(head == NULL || head->next == NULL || k<1) return NULL;
+    
+    std::stack<node *> st;
+    int count = 0;
+    for(node *p = head; p != NULL; p=p->next) {
+        count++;
+    }
+    
+    node *prev = head;
+    for(int i = 1; i < count-k; i++)
+       prev = prev->next;
+       
+    node *tmp = prev->next;
+    
+    while(tmp) {
+        st.push(tmp);
+        tmp = tmp->next;
+    }
+       
+    while(!st.empty()) {
+        node *temp = st.top();
+        st.pop();
+        temp->next = head;
+        head = temp;
+    } 
+    
+    prev->next = NULL;
+    
+    
+    return head;
+       
+       
+}
+
+void print(node *head) {
+    if(head == NULL) return;
+    
+    for(node *p = head; p != NULL; p=p->next) {
+        std::cout << p->data <<"->";
+    }
+    std::cout << std::endl;
+}
+
+int main() {
+    node *head = NULL;
+    insert(head, 5);
+    insert(head, 4);
+    insert(head, 3);
+    insert(head, 2);
+    insert(head, 1);
+    //print(head);
+    
+    node *head1 = NULL;
+    
+    head1 = rotatek(head, 4);
+    print(head1);
+    return 0;
+}
